@@ -1,0 +1,123 @@
+<%- include('partials/header'); -%>
+
+<form action="#">
+    <h2>Grep It!</h2>
+
+    <label for="problemstatement">Problem Statement</label>
+    <textarea name="problemstatement" rows="8" cols="32" required>
+
+    </textarea>
+
+    <div class="problemstatement error"></div>
+
+    <label for="tags">Tags</label>
+    <input type="tags" name="tags" required />
+    <div class="tags error"></div>
+
+    <label for="numcomapnies">Number of Companies to be displayed: </label>
+    <input type="number" name="numcompanies" min="5" max="30" required />
+    <div class="numcompanies error"></div>
+
+    <button id="button">Get Probability</button>
+</form>
+<br><br>
+<table class="table table-hover" id="companies">
+
+</table>
+
+<%- include('partials/footer'); -%>
+<script>
+    const form = document.querySelector('form');
+    const psError = document.querySelector('.problemstatement.error');
+    const tagsError = document.querySelector('.tags.error');
+    const numError = document.querySelector('.numcompanies.error');
+    const API_URL = "http://9c17ea898a91.ngrok.io/api/companies"
+    const companies = document.getElementById("companies")
+    const button = document.getElementById("button")
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        button.disabled = true;
+        // reset errors
+        psError.textContent = '';
+        tagsError.textContent = '';
+        numError.textContent = '';
+        companies.innerHTML = "";
+
+        // get values
+        const problemStatment = form.problemstatement.value;
+        const tags = form.tags.value;
+        const nums = form.numcompanies.value;
+
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    'problem-statement': problemStatment,
+                    tags,
+                    'num-companies': nums
+                }),
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await res.json();
+            console.log(data);
+            if (data.success = "fail") {
+                console.log(data.message)
+                // psError.textContent = data.errors.;
+            }
+            if (data.success = 'ok') {
+                // const thead = document.createElement('thead');
+                const tr = document.createElement('tr');
+                const th1 = document.createElement('th');
+                const th2 = document.createElement('th');
+                const th3 = document.createElement('th');
+
+                const rowNumber = document.createTextNode("Sr. No. ");
+                const companyName = document.createTextNode("Company Name")
+                const companyProbability = document.createTextNode("Probability")
+
+                th1.appendChild(rowNumber)
+                th2.appendChild(companyName)
+                th3.appendChild(companyProbability)
+
+                tr.appendChild(th1)
+                tr.appendChild(th2)
+                tr.appendChild(th3)
+
+                companies.appendChild(tr)
+
+                const companyData = data.company_data;
+                let i = 1;
+                companyData.forEach(company => {
+
+                    const tr = document.createElement('tr');
+                    const th1 = document.createElement('th');
+                    const td1 = document.createElement('td');
+                    const td2 = document.createElement('td');
+
+                    const rowNumber = document.createTextNode(i);
+                    const companyName = document.createTextNode(company.name)
+                    const companyProbability = document.createTextNode(company.probab)
+
+                    th1.appendChild(rowNumber)
+                    td1.appendChild(companyName)
+                    td2.appendChild(companyProbability)
+
+                    tr.appendChild(th1)
+                    tr.appendChild(td1)
+                    tr.appendChild(td2)
+
+                    companies.appendChild(tr)
+                    i++;
+                });
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+        button.disabled = false
+    });
+</script>
