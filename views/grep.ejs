@@ -1,39 +1,48 @@
 <%- include('partials/header'); -%>
 
-<form action="#">
-    <h2>Grep It!</h2>
+<div class="container">
+    <div class="row">
+        <div class="col col-sm-6">
+            <form action="#" class="form">
+                <h2>Grep It!</h2>
 
-    <label for="problemstatement">Problem Statement</label>
-    <textarea name="problemstatement" rows="8" cols="32" required>
+                <label for="problemstatement">Problem Statement</label>
+                <textarea class="form-control" name="problemstatement" rows="4" cols="32" required></textarea>
 
-    </textarea>
+                <div class="problemstatement error"></div>
 
-    <div class="problemstatement error"></div>
+                <label for="tags">Tags</label>
+                <input class="form-control" type="tags" name="tags" required />
+                <div class="tags error"></div>
 
-    <label for="tags">Tags</label>
-    <input type="tags" name="tags" required />
-    <div class="tags error"></div>
+                <label for="numcomapnies">Number of Companies to be displayed: </label>
+                <input class="form-control" type="number" name="numcompanies" min="5" max="30" required />
+                <div class="numcompanies error"></div>
 
-    <label for="numcomapnies">Number of Companies to be displayed: </label>
-    <input type="number" name="numcompanies" min="5" max="30" required />
-    <div class="numcompanies error"></div>
+                <button id="button">Get Companies!</button>
+            </form>
+        </div>
+        <div class="col col-sm-6">
+            <table class="table table-hover" id="companies">
+            </table>
+            <img src="/companiesbg.jpg" id="pic" alt="">
+        </div>
 
-    <button id="button">Get Probability</button>
-</form>
-<br><br>
-<table class="table table-hover" id="companies">
+    </div>
 
-</table>
-
+</div>
 <%- include('partials/footer'); -%>
+
 <script>
     const form = document.querySelector('form');
     const psError = document.querySelector('.problemstatement.error');
     const tagsError = document.querySelector('.tags.error');
     const numError = document.querySelector('.numcompanies.error');
-    const API_URL = "http://9c17ea898a91.ngrok.io/api/companies"
+    // const API_URL = "http://9c17ea898a91.ngrok.io/api/companies"
+    const API_URL = "https://apiforprogrepper.herokuapp.com/api/companies"
     const companies = document.getElementById("companies")
     const button = document.getElementById("button")
+    const pic = document.getElementById("pic")
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -43,6 +52,7 @@
         tagsError.textContent = '';
         numError.textContent = '';
         companies.innerHTML = "";
+        pic.remove();
 
         // get values
         const problemStatment = form.problemstatement.value;

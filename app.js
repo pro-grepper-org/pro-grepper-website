@@ -28,8 +28,8 @@ app.get('*', checkUser);
 app.get('/', (req, res) => res.render('home'));
 app.get('/grep', requireAuth, (req, res) => res.render('grep'));
 app.get('/aboutus', (req, res) => res.render('aboutus'));
-app.get('/features', (req, res) => res.render('features'));
 app.use(authRoutes);
+
 
 
 app.listen(port, () => {
