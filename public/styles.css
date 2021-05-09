@@ -74,6 +74,18 @@ footer{
 #pic{
   position: relative;
   width: 650px; 
-  height: 550px;
+  height: 555px;
   object-fit: none;
 }
+
+/* #pic{
+  position: absolute;
+  top: 10px;
+  left: 50%; 
+  width: 50%; 
+  height: 250px;
+  background-image: url('companiesbg.jpg');
+  background-position: 0 0; 
+  background-repeat:no-repeat; 
+  background-size: cover;
+} */
